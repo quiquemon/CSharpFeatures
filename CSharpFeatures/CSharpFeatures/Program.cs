@@ -10,6 +10,12 @@ namespace CSharpFeatures
 	{
 		static void Main(string[] args)
 		{
+			AnonymousCollections();
+		}
+
+		private static void AnonymousCollections()
+		{
+
 		}
 	}
 }
