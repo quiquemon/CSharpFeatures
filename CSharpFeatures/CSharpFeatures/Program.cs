@@ -2,17 +2,47 @@
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CSharpFeatures
 {
+	sealed class User
+	{
+		public string Name { get; }
+		public int Age { get; }
+		public bool IsNew { get; }
+
+		private User(string name, int age, bool isNew)
+		{
+			Name = name;
+			Age = age;
+			IsNew = isNew;
+		}
+
+		public static List<User> GetUsers()
+		{
+			return new List<User>() {
+				new User("Juan", 10, true),
+				new User("María", 11, false),
+				new User("John", 12, false),
+				new User("Mary", 13, false),
+				new User("José", 14, true),
+				new User("Lucía", 15, false),
+				new User("Joseph", 16, true),
+				new User("Lucy", 17, false),
+				new User("Pedro", 18, true),
+				new User("Erika", 19, false),
+				new User("Lel", 19, true)
+			};
+		}
+	}
+
 	class Program
 	{
 		static void Main(string[] args)
 		{
 			Collections();
 			AnonymousObjects();
+			Linq();
 			Console.Read();
 		}
 
@@ -89,6 +119,29 @@ namespace CSharpFeatures
 			Console.WriteLine("Objeto filtrado: Value = {0}", filtered[0].Value);
 
 			Console.WriteLine("\n--- Termina Método AnonymousObjects() ---\n");
+		}
+
+		/// <summary>
+		/// Consultas básicas con LINQ
+		/// </summary>
+		private static void Linq()
+		{
+			Console.WriteLine("--- Método Linq() ---\n");
+
+			var users          = User.GetUsers();
+			var trueUsersNames = from u in users where u.IsNew orderby u.Name ascending select u.Name;
+			var oldUsers       = from u in users where u.Age >= 18 select new { u.Name, u.Age };
+			var johns          = from u in users where u.Name == "John" || u.Name == "Juan" select new { u.Age, u.IsNew };
+
+			trueUsersNames.ToList().ForEach(u => Console.WriteLine("Usuario nuevo: {0}.", u));
+			Console.WriteLine();
+
+			oldUsers.ToList().ForEach(u => Console.WriteLine("Usuario viejo '{0}' de {1} años de edad.", u.Name, u.Age));
+			Console.WriteLine();
+
+			johns.ToList().ForEach(u => Console.WriteLine("John|Juan tiene {0} años y {1}", u.Age, (u.IsNew ? "es nuevo." : "ya existe.")));
+
+			Console.WriteLine("\n--- Termina Método Linq() ---\n");
 		}
 	}
 }
